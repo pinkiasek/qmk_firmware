@@ -1,6 +1,8 @@
-YAML
 name: Build K5 Max Firmware
-on: [push, workflow_dispatch]
+
+on:
+  push:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -10,9 +12,11 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
+
       - name: Compile
         run: |
           qmk compile -kb keychron/k5_max/iso/rgb -km keychron || qmk compile -kb keychron/k5_max/iso/white -km keychron
+
       - name: Upload Firmware
         uses: actions/upload-artifact@v4
         with:
