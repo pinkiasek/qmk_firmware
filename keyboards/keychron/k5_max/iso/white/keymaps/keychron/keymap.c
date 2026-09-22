@@ -61,3 +61,29 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,  _______,  _______,  _______,  _______,  _______,  BAT_LVL,  _______,  _______,  _______,  _______,  _______,            _______,            _______,            _______,  _______,  _______,
         _______,  _______,  _______,                                _______,                                _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            _______,  _______),
 };
+
+C
+// Vlastní obsluha indikátorů NumLock a CapsLock
+bool led_update_user(led_t led_state) {
+    // Pokud je NumLock aktivní, rozsvítí se; pokud ne, zhasne
+    return true; 
+}
+
+#if defined(BACKLIGHT_ENABLE)
+void backlight_indicators_user(void) {
+    if (host_keyboard_led_state().num_lock) {
+        // Pokud je NumLock zapnutý, zajistí rozsvícení klávesy
+        backlight_layer_indicator();
+    }
+}
+#endif
+
+#if defined(RGB_MATRIX_ENABLE)
+bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    // 37 bývá výchozí hardwarový index pro NumLock na 100% rozložení
+    if (!host_keyboard_led_state().num_lock) {
+        rgb_matrix_set_color(37, 0, 0, 0); // Vypne LED, když je NumLock vypnutý
+    }
+    return true;
+}
+#endif
